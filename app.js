@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { check, validationResult } = require("express-validator");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT  = 3000;
@@ -13,13 +14,37 @@ app.post('/api/contact', [
     check('email').isEmail().normalizeEmail().withMessage("Email must be an email"),
     check('phone_number').isMobilePhone().escape().trim().withMessage("Invalid phone number"),
     check('message').isLength({ min: 3, max: 255 }).escape().trim().withMessage("Message must be 3 to 255 characters")
-], (req, res) => {
+], async (req, res) => {
    const errors = validationResult(req);
    if(!errors.isEmpty()){
        return res.status(422).json({errors: errors.array()});
    }
 
-   console.log(req.body);
+   const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: "okumuamos88@gmail.com",
+        pass: "aawg pubf hnpd aczo"
+    },
+    })
+
+    const mailOptions = {
+        from: req.body.email,
+        to: 'okumuamos88@gmail.com',
+        subject: `Contact from ${req.body.name}, phone number: ${req.body.phone_number}`,
+        text: req.body.message
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ msg: "Message Sent" });
+    } catch (error) {
+        console.error("Error sending message", error);
+        res.status(500).json({ msg: "Message Not Sent", error });
+    }
 })
 
 app.listen(PORT, () => {
