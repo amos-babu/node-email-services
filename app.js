@@ -41,7 +41,7 @@ app.post('/api/contact', [
 
     try {
         await transporter.sendMail(mailOptions);
-        res.status(200).json({ msg: "Message Sent" });
+        res.status(200).json({ msg: "Message Sent Successfully" });
     } catch (error) {
         console.error("Error sending message", error);
         res.status(500).json({ msg: "Message Not Sent", error });
