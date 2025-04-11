@@ -1,10 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { check, validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 
 const app = express();
-const PORT  = 3000;
+const PORT  = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -21,13 +22,13 @@ app.post('/api/contact', [
    }
 
    const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port: 465,
+    service: process.env.SMTP_SERVICE,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-        user: "okumuamos88@gmail.com",
-        pass: "aawg pubf hnpd aczo"
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
     },
     })
 
