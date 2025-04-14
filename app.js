@@ -10,6 +10,8 @@ const PORT  = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
+app.get('/ping', (req, res) => res.send('OK'));
+
 app.post('/api/contact', [
     check('name').isLength({ min: 3, max: 50 }).escape().trim().withMessage("Name must be 3 to 50 characters"),
     check('email').isEmail().normalizeEmail().withMessage("Email must be an email"),
