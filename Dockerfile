@@ -6,7 +6,7 @@ COPY package.json package-lock.json /app/
 
 RUN npm install
 
-COPY app.js .env /app/
+COPY app.js /app/
 
 
 CMD [ "node", "app.js" ]
